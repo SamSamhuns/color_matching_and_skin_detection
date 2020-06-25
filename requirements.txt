@@ -1,1 +1,3 @@
 autopep8==1.5
+umpy==1.19.0
+opencv-python==4.2.0.34
