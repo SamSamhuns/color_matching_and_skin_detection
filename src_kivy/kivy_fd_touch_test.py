@@ -1,12 +1,16 @@
-# Histogram based approach to separate hand from background frame
-# Thresholding and filtering used to cancel background
-# HSV / YCrCb based color filtering is inaccurate when skin tones and lighting conditions change
+# coding:utf-8
+from kivy.app import App
+from kivy.clock import Clock
+from kivy.uix.image import Image
+from kivy.graphics.texture import Texture
+
+from kivy.uix.widget import Widget
+from kivy.core.window import Window
 
 import cv2
 import time
 import numpy as np
 
-hand_hist = None
 traverse_point = []
 total_rectangle = 9
 
@@ -171,8 +175,8 @@ def manage_image_opr(frame, hand_hist, improved_method=True):
         defects = cv2.convexityDefects(max_cont, hull)
         far_point = farthest_point(defects, max_cont, cnt_centroid)
 
-        print("Centroid : " + str(cnt_centroid) +
-              ", farthest Point (Finger Tip) : " + str(far_point))
+        # print("Centroid : " + str(cnt_centroid) +
+        #       ", farthest Point (Finger Tip) : " + str(far_point))
         cv2.circle(frame, far_point, 6, [0, 0, 255], -1)
 
         if len(traverse_point) < 20:
@@ -184,58 +188,59 @@ def manage_image_opr(frame, hand_hist, improved_method=True):
         draw_trailing_circles(frame, traverse_point)
 
 
-def main():
-    global hand_hist
-    is_hand_hist_created = False
-    capture = cv2.VideoCapture(0)
+class KivyCamera(Image):
+    def __init__(self, capture, fps, **kwargs):
+        super(KivyCamera, self).__init__(**kwargs)
+        self.capture = capture
+        Clock.schedule_interval(self.update, 1.0 / fps)
 
-    while capture.isOpened():
-        pressed_key = cv2.waitKey(1)
-        _, frame = capture.read()
-        frame = cv2.flip(frame, 1)
+        self.double_tapped = 0
+        self.hand_hist = None
 
-        if pressed_key & 0xFF == ord('z'):
-            is_hand_hist_created = True
-            hand_hist = hand_histogram(frame)
+    def on_touch_down(self, touch):
+        """
+        If the user double taps on the screen activate histogram capture the first time.
+        Any subsequent double taps have no effect
+        """
+        if touch.is_double_tap:
+            self.double_tapped += 1
 
-        if is_hand_hist_created:
-            manage_image_opr(frame, hand_hist)
-        else:
-            frame = draw_rect(frame)
+    def update(self, dt):
+        ret, frame = self.capture.read()
+        if ret:
+            # convert it to texture
+            frame = cv2.flip(frame, 0)
 
-        cv2.imshow("Live Feed", rescale_frame(frame))
+            if self.double_tapped == 1:
+                self.hand_hist = hand_histogram(frame)
+                self.double_tapped += 1
 
-        if pressed_key == 27:
-            break
+            if self.double_tapped > 0:
+                manage_image_opr(frame, self.hand_hist)
+            else:
+                frame = draw_rect(frame)
 
-        # for OpenCV major version < 3, manual calculation of frame rate for video feed might be required
-        fps = capture.get(cv2.CAP_PROP_FPS)
-        print(f"Frames per second using video.get(cv2.CAP_PROP_FPS) : {fps}")
+            buf1 = rescale_frame(frame)
 
-    cv2.destroyAllWindows()
-    capture.release()
+            buf = buf1.tobytes()
+            image_texture = Texture.create(
+                size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+            image_texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
+            # display image from the texture
+            self.texture = image_texture
 
 
-def calc_framerate(video_capture):
-    """
-    Manually calculate FPS
-    Returns (seconds, fps)
-        seconds: total time take to render 120 frames
-        fps: frames per second
-    """
-    num_frames = 120
-    print(f"Capturing {num_frames} frames")
+class CamApp(App):
+    def build(self):
+        self.capture = cv2.VideoCapture(0)
+        self.my_camera = KivyCamera(capture=self.capture, fps=30)
 
-    start = time.time()
-    for i in xrange(0, num_frames):
-        video_capture.read()
-    end = time.time()
+        return self.my_camera
 
-    seconds = end - start
-    fps = num_frames / seconds
-
-    return seconds, fps
+    def on_stop(self):
+        # without this, app will not exit even if the window is closed
+        self.capture.release()
 
 
 if __name__ == '__main__':
-    main()
+    CamApp().run()
