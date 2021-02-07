@@ -4,11 +4,7 @@ from kivy.clock import Clock
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 
-from kivy.uix.widget import Widget
-from kivy.core.window import Window
-
 import cv2
-import time
 import numpy as np
 
 traverse_point = []

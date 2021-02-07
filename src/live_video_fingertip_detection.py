@@ -1,6 +1,7 @@
 # Histogram based approach to separate hand from background frame
 # Thresholding and filtering used to cancel background
-# HSV / YCrCb based color filtering is inaccurate when skin tones and lighting conditions change
+# HSV / YCrCb based color filtering is inaccurate when skin tones
+# and lighting conditions change
 
 import cv2
 import time
@@ -187,8 +188,9 @@ def manage_image_opr(frame, hand_hist, improved_method=True):
 def main():
     global hand_hist
     is_hand_hist_created = False
+    print("HERE")
     capture = cv2.VideoCapture(0)
-
+    print("HERE")
     while capture.isOpened():
         pressed_key = cv2.waitKey(1)
         _, frame = capture.read()
@@ -205,10 +207,11 @@ def main():
 
         cv2.imshow("Live Feed", rescale_frame(frame))
 
-        if pressed_key == 27:
+        if pressed_key == 27:  # ESC key to quit
             break
 
-        # for OpenCV major version < 3, manual calculation of frame rate for video feed might be required
+        # for OpenCV major version < 3,
+        # manual calculation of frame rate for video feed might be required
         fps = capture.get(cv2.CAP_PROP_FPS)
         print(f"Frames per second using video.get(cv2.CAP_PROP_FPS) : {fps}")
 
@@ -227,7 +230,7 @@ def calc_framerate(video_capture):
     print(f"Capturing {num_frames} frames")
 
     start = time.time()
-    for i in xrange(0, num_frames):
+    for i in range(0, num_frames):
         video_capture.read()
     end = time.time()
 
