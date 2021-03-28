@@ -10,11 +10,27 @@ $ pip install -r requirements.txt
 
 ### Webcam fingertip detection
 
-`python live_video_fingertip_detection.py`
+```bash
+$ python skin_and_finger_detection/video_fingertip_detection.py
+```
 
 ### Webcam skin detection based on YCrCb Color Space
 
-`python live_video_skin_detection.py`
+```bash
+$ python skin_and_finger_detection/video_skin_detection.py
+```
+
+### Choose a HSV color space filter threshold on an image
+
+```bash
+$ python color_detection/image_hsv_threshold_picker.py -i <IMAGE_PATH>
+```
+
+### Filter colors in video using HSV color space filters
+
+```bash
+$ python color_detection/video_color_detection.py -v <VIDEO_PATH>
+```
 
 ## Reference
 

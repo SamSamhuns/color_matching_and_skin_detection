@@ -5,6 +5,7 @@
 
 import cv2
 import time
+import argparse
 import numpy as np
 
 hand_hist = None
@@ -185,12 +186,14 @@ def manage_image_opr(frame, hand_hist, improved_method=True):
         draw_trailing_circles(frame, traverse_point)
 
 
-def main():
+def detect_finger(vid_src):
+    if vid_src is None:
+        vid_src = 0
+
     global hand_hist
     is_hand_hist_created = False
-    print("HERE")
-    capture = cv2.VideoCapture(0)
-    print("HERE")
+
+    capture = cv2.VideoCapture(vid_src)
     while capture.isOpened():
         pressed_key = cv2.waitKey(1)
         _, frame = capture.read()
@@ -238,6 +241,18 @@ def calc_framerate(video_capture):
     fps = num_frames / seconds
 
     return seconds, fps
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v',
+                        '--video_path',
+                        type=str,
+                        help="""Video path where skin detection is done.
+                                If no path is provided, cv2 tries to use webcam""")
+    args = parser.parse_args()
+    vid_src = args.video_path if args.video_path is not None else 0
+    detect_finger(vid_src)
 
 
 if __name__ == '__main__':

@@ -1,9 +1,10 @@
 import numpy as np
+import argparse
 import cv2
 
 
-def main():
-    cap = cv2.VideoCapture(0)
+def detect_and_display_skin(vid_src):
+    cap = cv2.VideoCapture(vid_src)
 
     # define the upper and lower boundaries of the YCrCb pixels
     # intensities to be considered 'skin'
@@ -26,7 +27,9 @@ def main():
         # set all non-black pixels to white
         skin[np.where((skin != [0, 0, 0]).all(axis=2))] = [255, 255, 255]
         # Display the resulting frame
-        cv2.imshow('frame', skin)
+        cv2.imshow('orig', frame)
+        cv2.imshow('detected', skin)
+        cv2.moveWindow('detected', skin.shape[1], 0)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -34,6 +37,18 @@ def main():
     # When everything done, release the capture
     cap.release()
     cv2.destroyAllWindows()
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v',
+                        '--video_path',
+                        type=str,
+                        help="""Video path where skin detection is done.
+                                If no path is provided, cv2 tries to use webcam""")
+    args = parser.parse_args()
+    vid_src = args.video_path if args.video_path is not None else 0
+    detect_and_display_skin(vid_src)
 
 
 # Running the Program
