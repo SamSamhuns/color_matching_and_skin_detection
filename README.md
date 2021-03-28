@@ -1,4 +1,4 @@
-# Fast Finger Detection in Images
+# Color, Skin, and Finger Detection in Images
 
 ## Install requirements
 
