@@ -62,7 +62,7 @@ def hsv_threshold_picker(img_path, wait_time=33, mask_val=255):
 
         # Print if there is a change in HSV value
         if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax)):
-            print("Min H,S,V = (%d, %d, %d), Max H,S,V = (%d, %d, %d)" % (
+            print("min_HSV = (%d, %d, %d), max_HSV = (%d, %d, %d)" % (
                 hMin, sMin, vMin, hMax, sMax, vMax))
             phMin = hMin
             psMin = sMin
@@ -73,6 +73,7 @@ def hsv_threshold_picker(img_path, wait_time=33, mask_val=255):
 
         # Display output image
         cv2.imshow('image', output)
+        cv2.imshow('original', image)
 
         # Wait longer to prevent freeze for videos.
         if cv2.waitKey(wait_time) & 0xFF == ord('q'):
