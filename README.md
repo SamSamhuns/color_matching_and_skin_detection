@@ -1,5 +1,11 @@
 # Color, Skin, and Finger Detection in Images
 
+| <center>Source Image</center>                              | <center>Skin Detection</center>                                  |
+| ------------------------------------------ | ----------------------------------------------- |
+| ![alt text](media/img/person_pointing.jpg) | ![alt text](media/img/person_pointing_skin.jpg) |
+
+_Note: Skin Detection with HSV color space filtering might not work for all skin tones_
+
 ## Install requirements
 
 ```shell
