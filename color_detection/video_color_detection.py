@@ -13,7 +13,7 @@ def detect_color_in_hsv(video_src, min_HSV, max_HSV):
     video_src = 0 if video_src is None else video_src
     cap = cv2.VideoCapture(video_src)
 
-    while(True):
+    while True:
         _, frame = cap.read()
         frame = cv2.flip(frame, 1)
 
@@ -33,7 +33,6 @@ def detect_color_in_hsv(video_src, min_HSV, max_HSV):
         # Display the resulting frame
         cv2.imshow('detected', det_color)
         cv2.imshow('orig', frame)
-        cv2.moveWindow('detected', 0, det_color.shape[0] - 120)
 
         if cv2.waitKey(20) & 0xFF == ord('q'):
             break

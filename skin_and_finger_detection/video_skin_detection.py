@@ -10,15 +10,14 @@ def detect_and_display_skin(vid_src):
     # intensities to be considered 'skin'
     min_YCrCb = np.array([0, 133, 77], np.uint8)
     max_YCrCb = np.array([235, 173, 127], np.uint8)
-    while(True):
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+    while True:
         _, frame = cap.read()
         frame = cv2.flip(frame, 1)
 
-        # # Get pointer to video frames from primary device
+        # Get pointer to video frames from primary device
         YCrCb_converted = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
         skinMask = cv2.inRange(YCrCb_converted, min_YCrCb, max_YCrCb)
-
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
         skinMask = cv2.erode(skinMask, kernel, iterations=2)
         skinMask = cv2.dilate(skinMask, kernel, iterations=2)
         skinMask = cv2.GaussianBlur(skinMask, (3, 3), 0)
@@ -29,7 +28,6 @@ def detect_and_display_skin(vid_src):
         # Display the resulting frame
         cv2.imshow('orig', frame)
         cv2.imshow('detected', skin)
-        cv2.moveWindow('detected', skin.shape[1], 0)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

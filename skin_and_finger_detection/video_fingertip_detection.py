@@ -125,8 +125,8 @@ def farthest_point(defects, contour, centroid):
         s = defects[:, 0][:, 0]
         cx, cy = centroid
 
-        x = np.array(contour[s][:, 0][:, 0], dtype=np.float)
-        y = np.array(contour[s][:, 0][:, 1], dtype=np.float)
+        x = np.array(contour[s][:, 0][:, 0], dtype=float)
+        y = np.array(contour[s][:, 0][:, 1], dtype=float)
 
         xp = cv2.pow(cv2.subtract(x, cx), 2)
         yp = cv2.pow(cv2.subtract(y, cy), 2)
@@ -144,9 +144,8 @@ def farthest_point(defects, contour, centroid):
 
 def draw_trailing_circles(frame, traverse_point, color=[0, 255, 255]):
     if traverse_point is not None:
-        for i in range(len(traverse_point)):
-            cv2.circle(frame, traverse_point[i], int(
-                5 - (5 * i * 3) / 100), color, -1)
+        for i, pnt in enumerate(traverse_point):
+            cv2.circle(frame, pnt, int(5 - (5 * i * 3) / 100), color, -1)
 
 
 def manage_image_opr(frame, hand_hist, improved_method=True):
@@ -209,12 +208,9 @@ def detect_finger(vid_src):
             frame = draw_rect(frame)
 
         cv2.imshow("Live Feed", rescale_frame(frame))
-
         if pressed_key == 27:  # ESC key to quit
             break
 
-        # for OpenCV major version < 3,
-        # manual calculation of frame rate for video feed might be required
         fps = capture.get(cv2.CAP_PROP_FPS)
         print(f"Frames per second using video.get(cv2.CAP_PROP_FPS) : {fps}")
 
@@ -222,36 +218,15 @@ def detect_finger(vid_src):
     capture.release()
 
 
-def calc_framerate(video_capture):
-    """
-    Manually calculate FPS
-    Returns (seconds, fps)
-        seconds: total time take to render 120 frames
-        fps: frames per second
-    """
-    num_frames = 120
-    print(f"Capturing {num_frames} frames")
-
-    start = time.time()
-    for i in range(0, num_frames):
-        video_capture.read()
-    end = time.time()
-
-    seconds = end - start
-    fps = num_frames / seconds
-
-    return seconds, fps
-
-
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Press z when fingers are visible in the 9 squares")
     parser.add_argument('-v',
                         '--video_path',
                         type=str,
                         help="""Video path where skin detection is done.
                                 If no path is provided, cv2 tries to use webcam""")
     args = parser.parse_args()
-    vid_src = args.video_path if args.video_path is not None else 0
+    vid_src = args.video_path if args.video_path is not None else 1
     detect_finger(vid_src)
 
 

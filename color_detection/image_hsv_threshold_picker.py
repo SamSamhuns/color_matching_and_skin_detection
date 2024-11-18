@@ -7,7 +7,7 @@ def nothing(x):
     pass
 
 
-def hsv_threshold_picker(img_path, wait_time=33, mask_val=255):
+def hsv_threshold_picker(img_path, wait_time=30, mask_val=255):
     """
     params:
         img_src: path to image
@@ -39,7 +39,7 @@ def hsv_threshold_picker(img_path, wait_time=33, mask_val=255):
     hMin = sMin = vMin = hMax = sMax = vMax = 0
     phMin = psMin = pvMin = phMax = psMax = pvMax = 0
 
-    while(1):
+    while True:
         # get current positions of all trackbars
         hMin = cv2.getTrackbarPos('Hue Min', 'image')
         sMin = cv2.getTrackbarPos('Sat Min', 'image')
