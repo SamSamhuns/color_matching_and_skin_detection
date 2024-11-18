@@ -1,6 +1,6 @@
 # Color, Skin, and Finger Detection in Images
 
-| <center>Source Image</center>                              | <center>Skin Detection</center>                                  |
+| <center>Source Image</center>              | <center>Skin Detection</center>                 |
 | ------------------------------------------ | ----------------------------------------------- |
 | ![alt text](media/img/person_pointing.jpg) | ![alt text](media/img/person_pointing_skin.jpg) |
 
@@ -9,33 +9,36 @@ _Note: Skin Detection with HSV color space filtering might not work for all skin
 ## Install requirements
 
 ```shell
-$ python -m venv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ### Webcam fingertip detection
 
 ```bash
-$ python skin_and_finger_detection/video_fingertip_detection.py
+# runs finger detection on the webcam, Press z when fingers are visible in the 9 squares
+python skin_and_finger_detection/video_fingertip_detection.py
 ```
 
 ### Webcam skin detection based on YCrCb Color Space
 
 ```bash
-$ python skin_and_finger_detection/video_skin_detection.py
+# displays the original webcam screen and the skin detection result screen
+python skin_and_finger_detection/video_skin_detection.py
 ```
 
 ### Choose a HSV color space filter threshold on an image
 
 ```bash
-$ python color_detection/image_hsv_threshold_picker.py -i <IMAGE_PATH>
+# move sliders to find the optimal threshold for detecting different colors in image
+python color_detection/image_hsv_threshold_picker.py -i <IMAGE_PATH>
 ```
 
 ### Filter colors in video using HSV color space filters
 
 ```bash
-$ python color_detection/video_color_detection.py -v <VIDEO_PATH>
+python color_detection/video_color_detection.py -v <VIDEO_PATH>
 ```
 
 ## Reference
