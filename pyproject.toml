@@ -1,0 +1,38 @@
+[tool.poetry]
+package-mode = false
+
+[project]
+name = "color-matching-and-skin-detection"
+version = "0.1.0"
+description = "Color matching and skin detection"
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = {text = "Apache 2.0"}
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "opencv-python (>=4.12.0.88,<5.0.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.group.dev]
+optional = true
+
+
+[tool.poetry.group.tests]
+optional = true
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.13.1"
+
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^8.4.2"
+

@@ -8,9 +8,16 @@ _Note: Skin Detection with HSV color space filtering might not work for all skin
 
 ## Install requirements
 
+With `poetry` (Recommended):
+
 ```shell
-python -m venv venv
-source venv/bin/activate
+poetry install
+```
+
+With `venv`:
+
+```shell
+python -m venv venv; source venv/bin/activate
 pip install -r requirements.txt
 ```
 
