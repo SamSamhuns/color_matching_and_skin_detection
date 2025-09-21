@@ -18,22 +18,22 @@ def hsv_threshold_picker(img_path, wait_time=30, mask_val=255):
     output = image
 
     # Create a window
-    cv2.namedWindow('image')
+    cv2.namedWindow("image")
 
     # create trackbars for color change
     # Hue is from 0-179 for Opencv
-    cv2.createTrackbar('Hue Min', 'image', 0, 179, nothing)
-    cv2.createTrackbar('Sat Min', 'image', 0, 255, nothing)
-    cv2.createTrackbar('Val Min', 'image', 0, 255, nothing)
+    cv2.createTrackbar("Hue Min", "image", 0, 179, nothing)
+    cv2.createTrackbar("Sat Min", "image", 0, 255, nothing)
+    cv2.createTrackbar("Val Min", "image", 0, 255, nothing)
 
-    cv2.createTrackbar('Hue Max', 'image', 0, 179, nothing)
-    cv2.createTrackbar('Sat Max', 'image', 0, 255, nothing)
-    cv2.createTrackbar('Val Max', 'image', 0, 255, nothing)
+    cv2.createTrackbar("Hue Max", "image", 0, 179, nothing)
+    cv2.createTrackbar("Sat Max", "image", 0, 255, nothing)
+    cv2.createTrackbar("Val Max", "image", 0, 255, nothing)
 
     # Set default value for MAX HSV trackbars.
-    cv2.setTrackbarPos('Hue Max', 'image', 179)
-    cv2.setTrackbarPos('Sat Max', 'image', 255)
-    cv2.setTrackbarPos('Val Max', 'image', 255)
+    cv2.setTrackbarPos("Hue Max", "image", 179)
+    cv2.setTrackbarPos("Sat Max", "image", 255)
+    cv2.setTrackbarPos("Val Max", "image", 255)
 
     # Initialize to check if HSV min/max value changes
     hMin = sMin = vMin = hMax = sMax = vMax = 0
@@ -41,13 +41,13 @@ def hsv_threshold_picker(img_path, wait_time=30, mask_val=255):
 
     while True:
         # get current positions of all trackbars
-        hMin = cv2.getTrackbarPos('Hue Min', 'image')
-        sMin = cv2.getTrackbarPos('Sat Min', 'image')
-        vMin = cv2.getTrackbarPos('Val Min', 'image')
+        hMin = cv2.getTrackbarPos("Hue Min", "image")
+        sMin = cv2.getTrackbarPos("Sat Min", "image")
+        vMin = cv2.getTrackbarPos("Val Min", "image")
 
-        hMax = cv2.getTrackbarPos('Hue Max', 'image')
-        sMax = cv2.getTrackbarPos('Sat Max', 'image')
-        vMax = cv2.getTrackbarPos('Val Max', 'image')
+        hMax = cv2.getTrackbarPos("Hue Max", "image")
+        sMax = cv2.getTrackbarPos("Sat Max", "image")
+        vMax = cv2.getTrackbarPos("Val Max", "image")
 
         # Set minimum and max HSV values to display
         lower = np.array([hMin, sMin, vMin])
@@ -61,9 +61,18 @@ def hsv_threshold_picker(img_path, wait_time=30, mask_val=255):
         output[output == 0] = mask_val
 
         # Print if there is a change in HSV value
-        if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax)):
-            print("min_HSV = (%d, %d, %d), max_HSV = (%d, %d, %d)" % (
-                hMin, sMin, vMin, hMax, sMax, vMax))
+        if (
+            (phMin != hMin)
+            | (psMin != sMin)
+            | (pvMin != vMin)
+            | (phMax != hMax)
+            | (psMax != sMax)
+            | (pvMax != vMax)
+        ):
+            print(
+                "min_HSV = (%d, %d, %d), max_HSV = (%d, %d, %d)"
+                % (hMin, sMin, vMin, hMax, sMax, vMax)
+            )
             phMin = hMin
             psMin = sMin
             pvMin = vMin
@@ -72,11 +81,11 @@ def hsv_threshold_picker(img_path, wait_time=30, mask_val=255):
             pvMax = vMax
 
         # Display output image
-        cv2.imshow('image', output)
-        cv2.imshow('original', image)
+        cv2.imshow("image", output)
+        cv2.imshow("original", image)
 
         # Wait longer to prevent freeze for videos.
-        if cv2.waitKey(wait_time) & 0xFF == ord('q'):
+        if cv2.waitKey(wait_time) & 0xFF == ord("q"):
             break
 
     cv2.destroyAllWindows()
@@ -84,11 +93,13 @@ def hsv_threshold_picker(img_path, wait_time=30, mask_val=255):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i',
-                        '--image_path',
-                        type=str,
-                        required=True,
-                        help="""Image path where color matching is done in HSV space.""")
+    parser.add_argument(
+        "-i",
+        "--image_path",
+        type=str,
+        required=True,
+        help="""Image path where color matching is done in HSV space.""",
+    )
     args = parser.parse_args()
     hsv_threshold_picker(args.image_path)
 

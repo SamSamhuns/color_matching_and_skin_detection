@@ -28,13 +28,12 @@ def detect_color_in_hsv(video_src, min_HSV, max_HSV):
         det_color = cv2.bitwise_and(frame, frame, mask=color_mask)
 
         # set all non-black pixels to white
-        det_color[np.where((det_color != [0, 0, 0]).all(axis=2))] = [
-            255, 255, 255]
+        det_color[np.where((det_color != [0, 0, 0]).all(axis=2))] = [255, 255, 255]
         # Display the resulting frame
-        cv2.imshow('detected', det_color)
-        cv2.imshow('orig', frame)
+        cv2.imshow("detected", det_color)
+        cv2.imshow("orig", frame)
 
-        if cv2.waitKey(20) & 0xFF == ord('q'):
+        if cv2.waitKey(20) & 0xFF == ord("q"):
             break
 
     # When everything done, release the capture
@@ -44,11 +43,13 @@ def detect_color_in_hsv(video_src, min_HSV, max_HSV):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v',
-                        '--video_path',
-                        type=str,
-                        help="""Video path where color matching is done in HSV space.
-                                If no path is not provided, cv2 tries to use webcam""")
+    parser.add_argument(
+        "-v",
+        "--video_path",
+        type=str,
+        help="""Video path where color matching is done in HSV space.
+                                If no path is not provided, cv2 tries to use webcam""",
+    )
     args = parser.parse_args()
 
     # black shorts
